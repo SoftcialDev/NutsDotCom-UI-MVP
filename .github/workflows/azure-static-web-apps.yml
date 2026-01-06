@@ -51,6 +51,7 @@ jobs:
           action: "upload"
           app_location: "/"
           output_location: "dist"
+          app_build_command: "pnpm install --frozen-lockfile && pnpm run build"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

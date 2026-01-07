@@ -3,11 +3,15 @@
 
 name: Build and deploy dotnet core app to Azure Function App - compaint-analysis
 
+# DISABLED - This is a Node.js App Service project, not .NET Functions
+# This workflow was causing MSBUILD errors because it tried to build .NET in a Node.js repo
+# on:
+#   push:
+#     branches:
+#       - Dev
+#   workflow_dispatch:
 on:
-  push:
-    branches:
-      - Dev
-  workflow_dispatch:
+  workflow_dispatch:  # Only allow manual runs to prevent accidental execution
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root

@@ -33,6 +33,5 @@ debug-dev.js
 check-deps.js
 check-rollup.js
 install-rollup-native.js
-postinstall-rollup.js
 .cursor/debug.log
 

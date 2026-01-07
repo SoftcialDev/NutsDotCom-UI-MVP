@@ -35,9 +35,10 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --ignore-scripts
         env:
           CI: true
+          GITHUB_ACTIONS: true
 
       - name: Build application
         run: pnpm run build

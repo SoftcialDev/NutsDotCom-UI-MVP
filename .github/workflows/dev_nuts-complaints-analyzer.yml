@@ -53,9 +53,26 @@ jobs:
           cp package-server.json dist/package.json
           cp web.config dist/ 2>/dev/null || echo "web.config not found, skipping"
           
+          # Install server dependencies in dist directory
+          cd dist
+          npm install --production --ignore-scripts
+          
+          # Verify express is installed
+          if [ ! -d "node_modules/express" ]; then
+            echo "ERROR: express not found in node_modules"
+            ls -la node_modules/ | head -20
+            exit 1
+          fi
+          echo "✓ Express installed successfully"
+          cd ..
+          
           # Create .deployment file for App Service
           echo '[config]' > dist/.deployment
           echo 'SCM_DO_BUILD_DURING_DEPLOYMENT=false' >> dist/.deployment
+          
+          # List contents to verify
+          echo "Deployment package contents:"
+          ls -la dist/ | head -20
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp

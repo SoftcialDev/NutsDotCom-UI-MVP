@@ -189,3 +189,4 @@ Update the `VITE_API_URL` environment variable in your Static Web App to point t
 - [Azure Static Web Apps Documentation](https://docs.microsoft.com/azure/static-web-apps/)
 - [Azure Functions Documentation](https://docs.microsoft.com/azure/azure-functions/)
 
+

@@ -4,7 +4,9 @@ import './App.css'
 function App() {
   const [inputText, setInputText] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loadingLabels, setLoadingLabels] = useState(false)
   const [results, setResults] = useState(null)
+  const [labels, setLabels] = useState(null)
   const [error, setError] = useState(null)
 
   const handleAnalyse = async () => {
@@ -14,11 +16,15 @@ function App() {
     }
 
     setLoading(true)
+    setLoadingLabels(false)
     setError(null)
     setResults(null)
+    setLabels(null)
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:7071';
+      
+      // First, call the complaints endpoint
       const response = await fetch(`${apiUrl}/api/complaints`, {
         method: 'POST',
         headers: {
@@ -35,11 +41,46 @@ function App() {
 
       const data = await response.json()
       setResults(data)
+      setLoading(false)
+
+      // Then, call the labels endpoint in the background
+      setLoadingLabels(true)
+      try {
+        // Transform keyPhrases from objects to strings
+        const keyPhrasesArray = (data.keyPhrases || []).map(phrase => 
+          typeof phrase === 'string' ? phrase : phrase.text || phrase
+        )
+
+        const labelsResponse = await fetch(`${apiUrl}/api/complaints/labels`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            complaint: inputText,
+            sentiment: data.sentiment,
+            keyPhrases: keyPhrasesArray,
+            entities: data.entities || []
+          })
+        })
+
+        if (!labelsResponse.ok) {
+          throw new Error(`HTTP error! status: ${labelsResponse.status}`)
+        }
+
+        const labelsData = await labelsResponse.json()
+        setLabels(labelsData)
+      } catch (labelsErr) {
+        console.error('Error fetching labels:', labelsErr)
+        setError(`Failed to fetch labels: ${labelsErr.message}`)
+      } finally {
+        setLoadingLabels(false)
+      }
     } catch (err) {
       setError(err.message || 'Failed to analyze complaint. Please check if the service is running.')
       console.error('Error:', err)
-    } finally {
       setLoading(false)
+      setLoadingLabels(false)
     }
   }
 
@@ -108,11 +149,6 @@ function App() {
                     {results.keyPhrases.map((phrase, index) => (
                       <div key={index} className="phrase-item">
                         <span className="phrase-text">{phrase.text}</span>
-                        {phrase.confidenceScore !== undefined && (
-                          <span className="phrase-confidence">
-                            {(phrase.confidenceScore * 100).toFixed(0)}%
-                          </span>
-                        )}
                       </div>
                     ))}
                   </div>
@@ -123,11 +159,15 @@ function App() {
 
               <div className="result-column">
                 <h2 className="column-title">Labels</h2>
-                {results.labels && results.labels.length > 0 ? (
+                {loadingLabels ? (
+                  <div className="labels-loading">
+                    <p className="loading-text">Processing labels, please wait...</p>
+                  </div>
+                ) : labels && labels.labels && labels.labels.length > 0 ? (
                   <div className="labels-list">
-                    {results.labels.map((label, index) => (
+                    {labels.labels.map((label, index) => (
                       <div key={index} className="label-item">
-                        {typeof label === 'string' ? label : label.text || label}
+                        <span className="label-name">{label.displayName || label.id}</span>
                       </div>
                     ))}
                   </div>

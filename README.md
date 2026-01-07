@@ -62,3 +62,4 @@ The app sends POST requests to:
 
 Make sure the API service is running before using the application.
 
+

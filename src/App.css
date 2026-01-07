@@ -265,13 +265,106 @@
 
 .label-item {
   font-family: 'Montserrat', sans-serif;
-  padding: 0.75rem;
+  padding: 1rem;
   background: #faf8f3;
   border-radius: 3px;
   border-left: 3px solid #d2691e;
   color: #5c3a1f;
   font-weight: 500;
   font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.label-name {
+  font-weight: 600;
+  color: #5c3a1f;
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.label-score {
+  font-size: 0.8rem;
+  color: #ff8c42;
+  font-weight: 600;
+  background: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.label-confidence,
+.label-priority {
+  font-size: 0.85rem;
+  color: #8b5a2b;
+  font-weight: 500;
+}
+
+.label-evidence {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e8d5b7;
+}
+
+.evidence-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #8b5a2b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.5rem;
+}
+
+.evidence-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.evidence-kind {
+  font-weight: 600;
+  color: #ff8c42;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.evidence-pattern {
+  font-family: 'Courier New', monospace;
+  color: #5c3a1f;
+  font-size: 0.75rem;
+}
+
+.evidence-excerpt {
+  color: #8b5a2b;
+  font-style: italic;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.labels-loading {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.loading-text {
+  font-family: 'Montserrat', sans-serif;
+  color: #ff8c42;
+  font-weight: 500;
+  font-size: 0.95rem;
+  font-style: italic;
 }
 
 .no-data {

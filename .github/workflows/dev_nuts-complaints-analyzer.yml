@@ -51,7 +51,10 @@ jobs:
           # Copy server files to dist directory
           cp server.js dist/
           cp package-server.json dist/package.json
-          cp web.config dist/ 2>/dev/null || echo "web.config not found, skipping"
+          
+          # Only copy web.config if deploying to Windows App Service
+          # For Linux, skip web.config to avoid .NET detection
+          # cp web.config dist/ 2>/dev/null || echo "web.config not found, skipping"
           
           # Install server dependencies in dist directory
           cd dist
@@ -66,9 +69,15 @@ jobs:
           echo "✓ Express installed successfully"
           cd ..
           
-          # Create .deployment file for App Service
+          # Create .deployment file for App Service to prevent .NET build
           echo '[config]' > dist/.deployment
           echo 'SCM_DO_BUILD_DURING_DEPLOYMENT=false' >> dist/.deployment
+          echo 'command = npm start' >> dist/.deployment
+          
+          # Create .deploymentignore to prevent unwanted files
+          echo '*.sln' > dist/.deploymentignore
+          echo '*.csproj' >> dist/.deploymentignore
+          echo '*.vbproj' >> dist/.deploymentignore
           
           # List contents to verify
           echo "Deployment package contents:"

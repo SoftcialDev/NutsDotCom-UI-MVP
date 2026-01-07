@@ -67,7 +67,7 @@ jobs:
           # Create .deployment file for App Service to prevent .NET build
           echo '[config]' > dist/.deployment
           echo 'SCM_DO_BUILD_DURING_DEPLOYMENT=false' >> dist/.deployment
-          echo 'command = npm start' >> dist/.deployment
+          # Don't run npm start during deployment - Azure will use the startup command from portal
           
           # Create .deploymentignore to prevent unwanted files
           echo '*.sln' > dist/.deploymentignore
